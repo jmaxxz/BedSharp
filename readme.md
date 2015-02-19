@@ -4,10 +4,10 @@
   
   - If you don't see a unit test for it, assume it does not work
   
- ##What is this?
+##What is this?
  
- Bedsharp is a fluent fakes framework for RestSharp. It will help you
- write unit tests quicker, more cleanly, and with less frustration.
+Bedsharp is a fluent fakes framework for RestSharp. It will help you
+write unit tests quicker, more cleanly, and with less frustration.
  
 ##Why
 
