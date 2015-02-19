@@ -33,9 +33,8 @@ namespace BedSharp
         public void GetWithEncodedParams_ReturnsConfiguredResponse()
         {
             /**
-             * Notice how you stub against what you expect to actual url to be
-             * and even though parameters are used to build the url everything
-             * still works.
+             * In this test we demonstrate how even url parameters which need to be
+             * encoded are supported.
              */
 
             //Arrange
