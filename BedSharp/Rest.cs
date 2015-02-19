@@ -5,6 +5,7 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using RestSharp.Contrib;
 
 namespace BedSharp
 {
@@ -36,7 +37,15 @@ namespace BedSharp
 
         public FakeRestPredicate Url(string url)
         {
-            return new FakeRestPredicate(this, req => req.Resource == url);
+            return new FakeRestPredicate(this, req => {
+                string finalUrl = req.Resource;
+
+                foreach(var p in req.Parameters)
+                {
+                    finalUrl = finalUrl.Replace("{" + p.Name + "}", HttpUtility.UrlEncodeUnicode(p.Value.ToString()));
+                }
+                return finalUrl == url;
+            });
         }
     }
     internal static class RestSharpHelpers

@@ -9,12 +9,55 @@ namespace BedSharp
     public class FakeRestTests
     {
         [TestMethod]
-        public void GetUrl_ReturnsStatusAndValue()
+        public void GetWithParams_ReturnsConfiguredResponse()
+        {
+            /**
+             * Notice how you stub against what you expect to actual url to be
+             * and even though parameters are used to build the url everything
+             * still works.
+             */
+
+            //Arrange
+            var result = Rest.On("GET").Url("api/v1/value").Respond.Status(200).Content("foo");
+            var request = new RestRequest("api/v1/{x}");
+            request.AddUrlSegment("x", "value");
+
+            //Act
+            var response = result.Get(request);
+
+            //Assert
+            Assert.AreEqual("foo", response.Content);
+        }
+
+        [TestMethod]
+        public void GetWithEncodedParams_ReturnsConfiguredResponse()
+        {
+            /**
+             * Notice how you stub against what you expect to actual url to be
+             * and even though parameters are used to build the url everything
+             * still works.
+             */
+
+            //Arrange
+            var result = Rest.On("GET").Url("api/v1/value+2").Respond.Status(200).Content("foo");
+            var request = new RestRequest("api/v1/{x}");
+            request.AddUrlSegment("x", "value 2");
+
+            //Act
+            var response = result.Get(request);
+
+            //Assert
+            Assert.AreEqual("foo", response.Content);
+        }
+
+        [TestMethod]
+        public void Get_ReturnsConfiguredResponse()
         {
             var result = Rest.On("GET").Url("api/v1/things").Respond.Status(200).Content("foo");
 
-            var x = result.Get(new RestRequest("api/v1/things"));
-            Assert.AreEqual("foo", x.Content);
+            var response = result.Get(new RestRequest("api/v1/things"));
+            Assert.AreEqual("foo", response.Content);
+            Assert.AreEqual(200, (int)response.StatusCode);
         }
     }
 }
