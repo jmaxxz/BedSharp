@@ -52,10 +52,27 @@ namespace BedSharp
         [TestMethod]
         public void Get_ReturnsConfiguredResponse()
         {
+            //Arrange
             var result = Rest.On("GET").Url("api/v1/things").Respond.Status(200).Content("foo");
 
+            //Act
             var response = result.Get(new RestRequest("api/v1/things"));
+
+            //Assert
             Assert.AreEqual("foo", response.Content);
+            Assert.AreEqual(200, (int)response.StatusCode);
+        }
+
+        [TestMethod]
+        public void VerbsAreCaseInsensitive()
+        {
+            //Arrange
+            var result = Rest.On("gEt").Url("api/v1/things").Respond.Status(200);
+
+            //Act
+            var response = result.Get(new RestRequest("api/v1/things"));
+
+            //Assert
             Assert.AreEqual(200, (int)response.StatusCode);
         }
     }
