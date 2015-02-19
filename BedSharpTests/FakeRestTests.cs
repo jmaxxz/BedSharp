@@ -75,5 +75,18 @@ namespace BedSharp
             //Assert
             Assert.AreEqual(200, (int)response.StatusCode);
         }
+
+        [TestMethod]
+        public void WhenNoVerbSet_AnyVerbWorks()
+        {
+            //Arrange
+            var result = Rest.On().Url("api/v1/things").Respond.Status(201);
+
+            //Act
+            var response = result.Head(new RestRequest("api/v1/things"));
+
+            //Assert
+            Assert.AreEqual(201, (int)response.StatusCode);
+        }
     }
 }
