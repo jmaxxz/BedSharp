@@ -18,6 +18,18 @@ really hard. BedSharp solves this problem by providing a fake
 IRestClient with a great api. Since you TDD make your tests with
 BedSharp before getting your RestSharp on!
 
+##Examples
+
+```csharp
+        [TestMethod]
+        public void GetUrl_ReturnsStatusAndValue()
+        {
+            var result = Rest.On("GET").Url("api/v1/things").Respond.Status(200).Content("foo");
+
+            var x = result.Get(new RestRequest("api/v1/things"));
+            Assert.AreEqual("foo", x.Content);
+        }
+```
 
 ##License
 
