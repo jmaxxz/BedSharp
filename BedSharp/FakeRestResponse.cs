@@ -1,6 +1,8 @@
 ﻿using RestSharp;
 using System;
 using System.Collections.Generic;
+using System.Net;
+using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 
 namespace BedSharp
@@ -37,57 +39,9 @@ namespace BedSharp
             return new FakeRestResponse(this, response.CloneWith(content: content));
         }
 
-        public IAuthenticator Authenticator
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-            set
-            {
-                throw new NotImplementedException();
-            }
-        }
-
-        public Uri BaseUrl
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-            set
-            {
-                throw new NotImplementedException();
-            }
-        }
-
         public Uri BuildUri(IRestRequest request)
         {
             throw new NotImplementedException();
-        }
-
-        public System.Security.Cryptography.X509Certificates.X509CertificateCollection ClientCertificates
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-            set
-            {
-                throw new NotImplementedException();
-            }
-        }
-
-        public System.Net.CookieContainer CookieContainer
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-            set
-            {
-                throw new NotImplementedException();
-            }
         }
 
         public IList<Parameter> DefaultParameters
@@ -223,76 +177,24 @@ namespace BedSharp
             throw new NotImplementedException();
         }
 
-        public bool PreAuthenticate
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-            set
-            {
-                throw new NotImplementedException();
-            }
-        }
+        public X509CertificateCollection ClientCertificates { get; set; }
 
-        public System.Net.IWebProxy Proxy
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-            set
-            {
-                throw new NotImplementedException();
-            }
-        }
+        public CookieContainer CookieContainer { get; set; }
 
-        public int ReadWriteTimeout
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-            set
-            {
-                throw new NotImplementedException();
-            }
-        }
+        public IAuthenticator Authenticator { get; set; }
 
-        public int Timeout
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-            set
-            {
-                throw new NotImplementedException();
-            }
-        }
+        public Uri BaseUrl { get; set; }
 
-        public bool UseSynchronizationContext
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-            set
-            {
-                throw new NotImplementedException();
-            }
-        }
+        public bool PreAuthenticate { get; set; }
 
-        public string UserAgent
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-            set
-            {
-                throw new NotImplementedException();
-            }
-        }
+        public IWebProxy Proxy { get; set; }
+
+        public int ReadWriteTimeout { get; set; }
+
+        public int Timeout { get; set; }
+
+        public bool UseSynchronizationContext { get; set; }
+
+        public string UserAgent { get; set; }
     }
 }

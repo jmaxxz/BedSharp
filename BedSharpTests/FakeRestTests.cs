@@ -1,6 +1,9 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RestSharp;
+using System;
 using System.Collections.Generic;
+using System.Net;
+using System.Security.Cryptography.X509Certificates;
 
 namespace BedSharp
 {
@@ -76,7 +79,7 @@ namespace BedSharp
         }
 
         [TestMethod]
-        public void WhenADataReturnIsSetTheGenericExecuteWorks()
+        public void WhenADataReturnIsSet_ExecuteTWorks()
         {
             //Arrange
             var typedResult = new List<string>(new[] { "foo", "bar" });
@@ -87,6 +90,150 @@ namespace BedSharp
 
             //Assert
             Assert.AreEqual(typedResult, response.Data);
+        }
+
+        [TestMethod]
+        public void UserAgent_CanBeSet()
+        {
+            //Arrange
+            var restsharp = Rest.On().Respond;
+            var newUserAgent = Guid.NewGuid().ToString();
+
+            //Act
+            restsharp.UserAgent = newUserAgent;
+
+            //Assert
+            Assert.AreEqual(newUserAgent, restsharp.UserAgent);
+        }
+
+        [TestMethod]
+        public void UseSynchronizationContext_CanBeSet()
+        {
+            //Arrange
+            var restsharp1 = Rest.On().Respond;
+            var restsharp2 = Rest.On().Respond;
+
+            //Act
+            restsharp1.UseSynchronizationContext = true;
+            restsharp2.UseSynchronizationContext = false;
+
+            //Assert
+            Assert.AreEqual(true, restsharp1.UseSynchronizationContext);
+            Assert.AreEqual(false, restsharp2.UseSynchronizationContext);
+        }
+
+        [TestMethod]
+        public void Timeout_CanBeSet()
+        {
+            //Arrange
+            var restsharp = Rest.On().Respond;
+            var newTimeOut = new Random().Next();
+
+            //Act
+            restsharp.Timeout = newTimeOut;
+
+            //Assert
+            Assert.AreEqual(newTimeOut, restsharp.Timeout);
+        }
+
+        [TestMethod]
+        public void ReadWriteTimeout_CanBeSet()
+        {
+            //Arrange
+            var restsharp = Rest.On().Respond;
+            var newReadWriteTimeout = new Random().Next();
+
+            //Act
+            restsharp.ReadWriteTimeout = newReadWriteTimeout;
+
+            //Assert
+            Assert.AreEqual(newReadWriteTimeout, restsharp.ReadWriteTimeout);
+        }
+
+        [TestMethod]
+        public void Proxy_CanBeSet()
+        {
+            //Arrange
+            var restsharp = Rest.On().Respond;
+            var newProxy = new WebProxy();
+
+            //Act
+            restsharp.Proxy = newProxy;
+
+            //Assert
+            Assert.AreEqual(newProxy, restsharp.Proxy);
+        }
+
+        [TestMethod]
+        public void PreAuthenticate_CanBeSet()
+        {
+            //Arrange
+            var restsharp1 = Rest.On().Respond;
+            var restsharp2 = Rest.On().Respond;
+
+            //Act
+            restsharp1.PreAuthenticate = true;
+            restsharp2.PreAuthenticate = false;
+
+            //Assert
+            Assert.AreEqual(true, restsharp1.PreAuthenticate);
+            Assert.AreEqual(false, restsharp2.PreAuthenticate);
+        }
+
+        [TestMethod]
+        public void BaseUrl_CanBeSet()
+        {
+            //Arrange
+            var restsharp = Rest.On().Respond;
+            var newUri = new Uri("http://example.com");
+
+            //Act
+            restsharp.BaseUrl = newUri;
+
+            //Assert
+            Assert.AreEqual(newUri, restsharp.BaseUrl);
+        }
+
+        [TestMethod]
+        public void Authenticator_CanBeSet()
+        {
+            //Arrange
+            var restsharp = Rest.On().Respond;
+            var newAuthenticator = new HttpBasicAuthenticator("user", "password");
+
+            //Act
+            restsharp.Authenticator = newAuthenticator;
+
+            //Assert
+            Assert.AreEqual(newAuthenticator, restsharp.Authenticator);
+        }
+
+        [TestMethod]
+        public void CookieContainer_CanBeSet()
+        {
+            //Arrange
+            var restsharp = Rest.On().Respond;
+            var newCookieContainer = new CookieContainer();
+
+            //Act
+            restsharp.CookieContainer = newCookieContainer;
+
+            //Assert
+            Assert.AreEqual(newCookieContainer, restsharp.CookieContainer);
+        }
+
+        [TestMethod]
+        public void X509CertificateCollection_CanBeSet()
+        {
+            //Arrange
+            var restsharp = Rest.On().Respond;
+            var newClientCertificates = new X509CertificateCollection();
+
+            //Act
+            restsharp.ClientCertificates = newClientCertificates;
+
+            //Assert
+            Assert.AreEqual(newClientCertificates, restsharp.ClientCertificates);
         }
 
         [TestMethod]
