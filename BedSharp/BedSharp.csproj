@@ -42,8 +42,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FakeRestPredicate.cs" />
+    <Compile Include="FakeRestResponse.cs" />
     <Compile Include="Rest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RestSharpHelpers.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

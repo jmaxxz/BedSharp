@@ -1,6 +1,4 @@
-﻿using System;
-using BedSharp;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RestSharp;
 using System.Collections.Generic;
 
