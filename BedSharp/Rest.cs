@@ -55,7 +55,7 @@ namespace BedSharp
     }
     internal static class RestSharpHelpers
     {
-        internal static IRestResponse CloneWith(this IRestResponse response, 
+        internal static IRestResponse<object> CloneWith(this IRestResponse<object> response, 
                 string content = null,
                 string contentEncoding = null,
                 long? contentLength = null,
@@ -70,9 +70,10 @@ namespace BedSharp
                 Uri responseUri = null,
                 string server = null,
                 int? statusCode = null,
-                string statusDescription = null)
+                string statusDescription = null,
+                object data = null)
         {
-            return new RestResponse()
+            return new RestResponse<object>()
             {
                 Content = content ?? response.Content,
                 ContentEncoding = contentEncoding ?? response.ContentEncoding,
@@ -88,23 +89,54 @@ namespace BedSharp
                 ResponseUri = responseUri ?? response.ResponseUri,
                 Server = server ?? response.Server,
                 StatusCode = (HttpStatusCode)(statusCode ?? (int)response.StatusCode),
-                StatusDescription = statusDescription ?? response.StatusDescription
+                StatusDescription = statusDescription ?? response.StatusDescription,
+                Data = data ?? null
             };
         }
+        internal static IRestResponse<T> MakeTyped<T>(this IRestResponse<object> response) where T : new()
+        {
+            T typedData = default(T);
+            try
+            {
+                typedData = (T)response.Data;
+            }
+            catch { }
+
+            return new RestResponse<T>()
+            {
+                Content = response.Content,
+                ContentEncoding = response.ContentEncoding,
+                ContentLength = response.ContentLength,
+                ContentType = response.ContentType,
+                //Cookies = response.Cookies, Support this in the future
+                ErrorException = response.ErrorException,
+                ErrorMessage = response.ErrorMessage,
+                //Headers = response.Headers, Support this in the future
+                RawBytes = response.RawBytes,
+                Request = response.Request,
+                ResponseStatus = response.ResponseStatus,
+                ResponseUri = response.ResponseUri,
+                Server = response.Server,
+                StatusCode = response.StatusCode,
+                StatusDescription = response.StatusDescription,
+                Data = typedData
+            };
+        }
+
     }
 
     public class FakeRestResponse : IRestClient
     {
         private Predicate<IRestRequest> requestPredicate;
-        private IRestResponse response;
+        private IRestResponse<object> response;
 
         internal FakeRestResponse(Predicate<IRestRequest> predicate)
         {
-            response = new RestResponse();
+            response = new RestResponse<object>();
             requestPredicate = predicate;
         }
 
-        private FakeRestResponse(FakeRestResponse fake, IRestResponse response)
+        private FakeRestResponse(FakeRestResponse fake, IRestResponse<object> response)
         {
             requestPredicate = fake.requestPredicate;
             this.response = response;
@@ -113,6 +145,11 @@ namespace BedSharp
         public FakeRestResponse Status(int code)
         {
             return new FakeRestResponse(this, response.CloneWith(statusCode:code));
+        }
+
+        public FakeRestResponse Data<T>(T value)
+        {
+            return new FakeRestResponse(this, response.CloneWith(data:value));
         }
 
         public FakeRestResponse Content(string content)
@@ -180,7 +217,11 @@ namespace BedSharp
 
         public IRestResponse<T> Execute<T>(IRestRequest request) where T : new()
         {
-            throw new NotImplementedException();
+            if (requestPredicate(request))
+            {
+                return response.MakeTyped<T>();
+            }
+            return new RestResponse<T>();
         }
 
         public IRestResponse Execute(IRestRequest request)

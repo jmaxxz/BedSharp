@@ -2,6 +2,7 @@
 using BedSharp;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RestSharp;
+using System.Collections.Generic;
 
 namespace BedSharp
 {
@@ -74,6 +75,20 @@ namespace BedSharp
 
             //Assert
             Assert.AreEqual(200, (int)response.StatusCode);
+        }
+
+        [TestMethod]
+        public void WhenADataReturnIsSetTheGenericExecuteWorks()
+        {
+            //Arrange
+            var typedResult = new List<string>(new[] { "foo", "bar" });
+            var restsharp = Rest.On().Url("api/v1/things").Respond.Data(typedResult);
+
+            //Act
+            var response = restsharp.Get<List<string>>(new RestRequest("api/v1/things"));
+
+            //Assert
+            Assert.AreEqual(typedResult, response.Data);
         }
 
         [TestMethod]
