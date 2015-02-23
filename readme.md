@@ -1,3 +1,5 @@
+[![Build status](https://ci.appveyor.com/api/projects/status/yfhvb508xq2eip48?svg=true)](https://ci.appveyor.com/project/jmaxxz/bedsharp)
+
 ##WARNING: This project is in the early stages of development
 
   - Expect the api to change
