@@ -248,5 +248,18 @@ namespace BedSharp
             //Assert
             Assert.AreEqual(201, (int)response.StatusCode);
         }
+
+        [TestMethod]
+        public void WhenResponseItSetToTimeout_ResponseStatusTimeoutIsSet()
+        {
+            //Arrange
+            var result = Rest.On().Timeout;
+
+            //Act
+            var response = result.Head(new RestRequest("api/v1/things"));
+
+            //Assert
+            Assert.AreEqual(ResponseStatus.TimedOut, response.ResponseStatus);
+        }
     }
 }

@@ -10,17 +10,18 @@ namespace BedSharp
         private Predicate<IRestRequest> predicate;
 
         public FakeRestResponse Respond { get; private set; }
+        public FakeRestResponse Timeout { get; private set; }
 
-        private FakeRestPredicate(FakeRestPredicate fake, Predicate<IRestRequest> pr = null)
+        private FakeRestPredicate(FakeRestPredicate fake, Predicate<IRestRequest> pr = null) 
+            : this(req => fake.predicate(req) && (pr ?? tautology)(req))
         {
-            predicate = req => fake.predicate(req) && (pr ?? tautology)(req);
-            Respond = new FakeRestResponse(predicate);
         }
 
         internal FakeRestPredicate(Predicate<IRestRequest> pr = null)
         {
             predicate = pr ?? tautology;
             Respond = new FakeRestResponse(predicate);
+            Timeout = new FakeRestResponse(predicate).Status(ResponseStatus.TimedOut);
         }
 
         public FakeRestPredicate Url(string url)
