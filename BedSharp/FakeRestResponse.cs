@@ -34,6 +34,12 @@ namespace BedSharp
             return new FakeRestResponse(this, response.CloneWith(responseStatus: status));
         }
 
+        public FakeRestResponse Error(Exception error)
+        {
+            return new FakeRestResponse(this, response.CloneWith(responseStatus: ResponseStatus.Error,
+                errorException: error, errorMessage: error.Message));
+        }
+
         public FakeRestResponse Data<T>(T value)
         {
             return new FakeRestResponse(this, response.CloneWith(data: value));

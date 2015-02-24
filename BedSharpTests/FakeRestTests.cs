@@ -261,5 +261,18 @@ namespace BedSharp
             //Assert
             Assert.AreEqual(ResponseStatus.TimedOut, response.ResponseStatus);
         }
+
+        [TestMethod]
+        public void ResponseCanHaveExceptionInformation()
+        {
+            //Arrange
+            var result = Rest.On().Respond.Error(new Exception("Some Error"));
+
+            //Act
+            var response = result.Head(new RestRequest("api/v1/things"));
+
+            //Assert
+            Assert.AreEqual("Some Error", response.ErrorMessage);
+        }
     }
 }
