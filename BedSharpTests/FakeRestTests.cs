@@ -274,5 +274,54 @@ namespace BedSharp
             //Assert
             Assert.AreEqual("Some Error", response.ErrorMessage);
         }
+
+        [TestMethod]
+        public void OnVerbCanBeUsedToChainMultipleResponses()
+        {
+            //Arrange
+            var result = Rest.On("Get").Respond.Status(201)
+                .On("Put").Respond.Status(400);
+
+            //Act
+            var response1 = result.Get(new RestRequest("api/v1/things"));
+            var response2 = result.Put(new RestRequest("api/v1/things"));
+
+            //Assert
+            Assert.AreEqual(201, (int)response1.StatusCode);
+            Assert.AreEqual(400, (int)response2.StatusCode);
+        }
+
+        [TestMethod]
+        public void OnCanBeUsedToChainMultipleResponses()
+        {
+            //Arrange
+            var result = Rest.On("Get").Respond.Status(201)
+                .On().Respond.Status(400);
+
+            //Act
+            var response1 = result.Get(new RestRequest("api/v1/things"));
+            var response2 = result.Put(new RestRequest("api/v1/things"));
+
+            //Assert
+            Assert.AreEqual(201, (int)response1.StatusCode);
+            Assert.AreEqual(400, (int)response2.StatusCode);
+        }
+
+        [TestMethod]
+        public void MultipleResponsesWithAndWithoutTypesCan()
+        {
+            //Arrange
+            var typedResult = new List<string>(new[] { "foo", "bar" });
+            var result = Rest.On("Get").Respond.Status(201)
+                .On("Put").Url("api/v1/things").Respond.Status(400).Data(typedResult);
+
+            //Act
+            var response1 = result.Get(new RestRequest("api/v1/things"));
+            var response2 = result.Put<List<string>>(new RestRequest("api/v1/things"));
+
+            //Assert
+            Assert.AreEqual(201, (int)response1.StatusCode);
+            Assert.AreEqual(typedResult, response2.Data);
+        }
     }
 }

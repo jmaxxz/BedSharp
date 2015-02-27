@@ -11,7 +11,7 @@ namespace BedSharp
 
         public static FakeRestPredicate On(string verb)
         {
-            return new FakeRestPredicate(x=>x.Method.ToString().Equals(verb, StringComparison.InvariantCultureIgnoreCase));
+            return new FakeRestPredicate().Verb(verb);
         }
     }
 }

@@ -4,24 +4,38 @@ using System.Collections.Generic;
 using System.Net;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
+using System.Linq;
 
 namespace BedSharp
 {
     public class FakeRestResponse : IRestClient
     {
+        private IEnumerable<FakeRestResponse> existingResponses;
         private Predicate<IRestRequest> requestPredicate;
         private IRestResponse<object> response;
 
-        internal FakeRestResponse(Predicate<IRestRequest> predicate)
+        internal FakeRestResponse(IEnumerable<FakeRestResponse> existingResponses, Predicate<IRestRequest> predicate)
         {
+            this.existingResponses = existingResponses;
             response = new RestResponse<object>();
             requestPredicate = predicate;
         }
 
         private FakeRestResponse(FakeRestResponse fake, IRestResponse<object> response)
         {
+            existingResponses = fake.existingResponses;
             requestPredicate = fake.requestPredicate;
             this.response = response;
+        }
+
+        public FakeRestPredicate On(string verb)
+        {
+            return On().Verb(verb);
+        }
+
+        public FakeRestPredicate On()
+        {
+            return new FakeRestPredicate(existingResponses.Concat(new[] { this }));
         }
 
         public FakeRestResponse Status(int code)
@@ -62,6 +76,14 @@ namespace BedSharp
 
         public IRestResponse<T> Execute<T>(IRestRequest request) where T : new()
         {
+            foreach (var existing in existingResponses)
+            {
+                if (existing.requestPredicate(request))
+                {
+                    return existing.response.MakeTyped<T>();
+                }
+            }
+
             if (requestPredicate(request))
             {
                 return response.MakeTyped<T>();
@@ -71,6 +93,14 @@ namespace BedSharp
 
         public IRestResponse Execute(IRestRequest request)
         {
+            foreach (var existing in existingResponses)
+            {
+                if (existing.requestPredicate(request))
+                {
+                    return existing.response.CloneWith();
+                }
+            }
+
             if (requestPredicate(request))
             {
                 return response.CloneWith();
