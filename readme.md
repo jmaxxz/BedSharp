@@ -2,6 +2,8 @@
 
 ##WARNING: This project is in the early stages of development
 
+[![Join the chat at https://gitter.im/jmaxxz/BedSharp](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/jmaxxz/BedSharp?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
   - Expect the api to change
   
   - If you don't see a unit test for it, assume it does not work
