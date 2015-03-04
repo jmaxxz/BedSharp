@@ -74,21 +74,26 @@ namespace BedSharp
             get { throw new NotImplementedException(); }
         }
 
-        public IRestResponse<T> Execute<T>(IRestRequest request) where T : new()
+        private IRestResponse<T> UnrestrictedExecute<T>(IRestRequest request)
         {
             foreach (var existing in existingResponses)
             {
                 if (existing.requestPredicate(request))
                 {
-                    return existing.response.MakeTyped<T>();
+                    return existing.response.CloneWith(request:request).MakeTyped<T>();
                 }
             }
 
             if (requestPredicate(request))
             {
-                return response.MakeTyped<T>();
+                return response.CloneWith(request: request).MakeTyped<T>();
             }
-            return new RestResponse<T>();
+            return new RestResponse<T>() { Request = request };
+        }
+
+        public IRestResponse<T> Execute<T>(IRestRequest request) where T : new()
+        {
+            return UnrestrictedExecute<T>(request);
         }
 
         public IRestResponse Execute(IRestRequest request)
@@ -97,15 +102,15 @@ namespace BedSharp
             {
                 if (existing.requestPredicate(request))
                 {
-                    return existing.response.CloneWith();
+                    return existing.response.CloneWith(request: request);
                 }
             }
 
             if (requestPredicate(request))
             {
-                return response.CloneWith();
+                return response.CloneWith(request: request);
             }
-            return new RestResponse();
+            return new RestResponse() { Request = request };
         }
 
         public IRestResponse<T> ExecuteAsGet<T>(IRestRequest request, string httpMethod) where T : new()
@@ -175,7 +180,9 @@ namespace BedSharp
 
         public Task<IRestResponse<T>> ExecuteGetTaskAsync<T>(IRestRequest request)
         {
-            throw new NotImplementedException();
+            //The real rest sharp modified your request as well.
+            request.Method = Method.GET;
+            return ExecuteTaskAsync<T>(request);
         }
 
         public Task<IRestResponse> ExecutePostTaskAsync(IRestRequest request, System.Threading.CancellationToken token)
@@ -195,7 +202,9 @@ namespace BedSharp
 
         public Task<IRestResponse<T>> ExecutePostTaskAsync<T>(IRestRequest request)
         {
-            throw new NotImplementedException();
+            //The real rest sharp modified your request as well.
+            request.Method = Method.POST;
+            return ExecuteTaskAsync<T>(request);
         }
 
         public Task<IRestResponse> ExecuteTaskAsync(IRestRequest request)
@@ -210,7 +219,10 @@ namespace BedSharp
 
         public Task<IRestResponse<T>> ExecuteTaskAsync<T>(IRestRequest request)
         {
-            throw new NotImplementedException();
+            return Task.Run<IRestResponse<T>>(() =>
+            {
+                return UnrestrictedExecute<T>(request);
+            });
         }
 
         public Task<IRestResponse<T>> ExecuteTaskAsync<T>(IRestRequest request, System.Threading.CancellationToken token)

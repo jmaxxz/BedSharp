@@ -42,10 +42,10 @@ namespace BedSharp
                 Server = server ?? response.Server,
                 StatusCode = (HttpStatusCode)(statusCode ?? (int)response.StatusCode),
                 StatusDescription = statusDescription ?? response.StatusDescription,
-                Data = data ?? null
+                Data = data ?? response.Data
             };
         }
-        internal static IRestResponse<T> MakeTyped<T>(this IRestResponse<object> response) where T : new()
+        internal static IRestResponse<T> MakeTyped<T>(this IRestResponse<object> response)
         {
             T typedData = default(T);
             try
