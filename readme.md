@@ -1,11 +1,8 @@
+BedSharp
+========
+
 [![Build status](https://ci.appveyor.com/api/projects/status/yfhvb508xq2eip48?svg=true)](https://ci.appveyor.com/project/jmaxxz/bedsharp)
 
-##WARNING: This project is in the early stages of development
-
-  - Expect the api to change
-  
-  - If you don't see a unit test for it, assume it does not work
-  
 ##What is this?
  
 Bedsharp is a fluent fakes framework for RestSharp. It will help you
