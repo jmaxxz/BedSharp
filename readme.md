@@ -1,7 +1,7 @@
 BedSharp
 ========
 
-[![Build status](https://ci.appveyor.com/api/projects/status/yfhvb508xq2eip48?svg=true)](https://ci.appveyor.com/project/jmaxxz/bedsharp)
+[![Join the chat at https://gitter.im/jmaxxz/BedSharp](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/jmaxxz/BedSharp?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge) [![Build status](https://ci.appveyor.com/api/projects/status/yfhvb508xq2eip48?svg=true)](https://ci.appveyor.com/project/jmaxxz/bedsharp)
 
 ##What is this?
  
