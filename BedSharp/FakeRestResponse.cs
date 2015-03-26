@@ -120,7 +120,8 @@ namespace BedSharp
 
         public IRestResponse ExecuteAsGet(IRestRequest request, string httpMethod)
         {
-            throw new NotImplementedException();
+            request.Method = Method.GET;
+            return Execute(request);
         }
 
         public IRestResponse<T> ExecuteAsPost<T>(IRestRequest request, string httpMethod) where T : new()
@@ -130,7 +131,8 @@ namespace BedSharp
 
         public IRestResponse ExecuteAsPost(IRestRequest request, string httpMethod)
         {
-            throw new NotImplementedException();
+            request.Method = Method.POST;
+            return Execute(request);
         }
 
         public RestRequestAsyncHandle ExecuteAsync<T>(IRestRequest request, Action<IRestResponse<T>, RestRequestAsyncHandle> callback)
