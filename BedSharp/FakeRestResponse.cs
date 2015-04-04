@@ -126,7 +126,8 @@ namespace BedSharp
 
         public IRestResponse<T> ExecuteAsPost<T>(IRestRequest request, string httpMethod) where T : new()
         {
-            throw new NotImplementedException();
+            request.Method = Method.POST;
+            return Execute<T>(request);
         }
 
         public IRestResponse ExecuteAsPost(IRestRequest request, string httpMethod)

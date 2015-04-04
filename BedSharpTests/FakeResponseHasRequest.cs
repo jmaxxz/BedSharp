@@ -51,6 +51,19 @@ namespace BedSharp
         }
 
         [TestMethod]
+        public void ExecuteAsPostT()
+        {
+            //Arrange
+            var restclient = Rest.On().Respond;
+
+            //Act
+            var response = restclient.ExecuteAsPost<object>(new RestRequest("/url/resource"), "");
+
+            //Assert
+            Assert.AreEqual(Method.POST, response.Request.Method);
+        }
+
+        [TestMethod]
         public void Post()
         {
             //Arrange
