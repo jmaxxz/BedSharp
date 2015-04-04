@@ -174,7 +174,8 @@ namespace BedSharp
 
         public Task<IRestResponse> ExecuteGetTaskAsync(IRestRequest request)
         {
-            throw new NotImplementedException();
+            request.Method = Method.GET;
+            return ExecuteTaskAsync(request);
         }
 
         public Task<IRestResponse<T>> ExecuteGetTaskAsync<T>(IRestRequest request, System.Threading.CancellationToken token)
@@ -213,7 +214,10 @@ namespace BedSharp
 
         public Task<IRestResponse> ExecuteTaskAsync(IRestRequest request)
         {
-            throw new NotImplementedException();
+            return Task.Run<IRestResponse>(() =>
+            {
+                return Execute(request);
+            });
         }
 
         public Task<IRestResponse> ExecuteTaskAsync(IRestRequest request, System.Threading.CancellationToken token)

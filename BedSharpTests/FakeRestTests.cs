@@ -325,18 +325,32 @@ namespace BedSharp
         }
 
         [TestMethod]
-        public void TaskAsyncExecuteCanBeUsed()
+        public void TaskAsyncExecuteTCanBeUsed()
         {
             //Arrange
             var typedResult = new List<string>(new[] { "foo", "bar" });
             var result = Rest.On("Get").Respond.Status(201).Data(typedResult);
 
             //Act
-            var response = result.ExecuteGetTaskAsync<List<string>>(new RestRequest("api/v1/things")).Result;
+            var response = result.ExecuteTaskAsync<List<string>>(new RestRequest("api/v1/things", Method.GET)).Result;
 
             //Assert
             Assert.AreEqual(201, (int)response.StatusCode);
             Assert.AreEqual(typedResult, response.Data);
+        }
+
+        [TestMethod]
+        public void TaskAsyncExecuteCanBeUsed()
+        {
+            //Arrange
+            var result = Rest.On("Get").Respond.Status(201).Content("response");
+
+            //Act
+            var response = result.ExecuteTaskAsync(new RestRequest("api/v1/things", Method.GET)).Result;
+
+            //Assert
+            Assert.AreEqual(201, (int)response.StatusCode);
+            Assert.AreEqual("response", response.Content);
         }
     }
 }

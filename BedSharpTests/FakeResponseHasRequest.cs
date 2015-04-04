@@ -153,5 +153,18 @@ namespace BedSharp
             //Assert
             Assert.AreEqual(Method.GET, response.Request.Method);
         }
+
+        [TestMethod]
+        public void GetAsyncTask()
+        {
+            //Arrange
+            var restclient = Rest.On().Respond;
+
+            //Act
+            var response = restclient.ExecuteGetTaskAsync(new RestRequest("/url/resource")).Result;
+
+            //Assert
+            Assert.AreEqual(Method.GET, response.Request.Method);
+        }
     }
 }
