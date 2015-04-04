@@ -115,7 +115,8 @@ namespace BedSharp
 
         public IRestResponse<T> ExecuteAsGet<T>(IRestRequest request, string httpMethod) where T : new()
         {
-            throw new NotImplementedException();
+            request.Method = Method.GET;
+            return Execute<T>(request);
         }
 
         public IRestResponse ExecuteAsGet(IRestRequest request, string httpMethod)
