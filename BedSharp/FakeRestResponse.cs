@@ -197,7 +197,8 @@ namespace BedSharp
 
         public Task<IRestResponse> ExecutePostTaskAsync(IRestRequest request)
         {
-            throw new NotImplementedException();
+            request.Method = Method.POST;
+            return ExecuteTaskAsync(request);
         }
 
         public Task<IRestResponse<T>> ExecutePostTaskAsync<T>(IRestRequest request, System.Threading.CancellationToken token)

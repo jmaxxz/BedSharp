@@ -129,13 +129,26 @@ namespace BedSharp
         }
 
         [TestMethod]
-        public void PostAsyncTaskT()
+        public void ExecutePostTaskAsyncT()
         {
             //Arrange
             var restclient = Rest.On().Respond;
 
             //Act
             var response = restclient.ExecutePostTaskAsync<object>(new RestRequest("/url/resource")).Result;
+
+            //Assert
+            Assert.AreEqual(Method.POST, response.Request.Method);
+        }
+
+        [TestMethod]
+        public void ExecutePostTaskAsync()
+        {
+            //Arrange
+            var restclient = Rest.On().Respond;
+
+            //Act
+            var response = restclient.ExecutePostTaskAsync(new RestRequest("/url/resource")).Result;
 
             //Assert
             Assert.AreEqual(Method.POST, response.Request.Method);
