@@ -5,6 +5,7 @@ using System.Net;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 using System.Linq;
+using System.Threading;
 
 namespace BedSharp
 {
@@ -167,76 +168,75 @@ namespace BedSharp
             throw new NotImplementedException();
         }
 
-        public Task<IRestResponse> ExecuteGetTaskAsync(IRestRequest request, System.Threading.CancellationToken token)
+        public Task<IRestResponse> ExecuteGetTaskAsync(IRestRequest request, CancellationToken token)
         {
-            throw new NotImplementedException();
+            request.Method = Method.GET;
+            return ExecuteTaskAsync(request, token);
         }
 
         public Task<IRestResponse> ExecuteGetTaskAsync(IRestRequest request)
         {
-            request.Method = Method.GET;
-            return ExecuteTaskAsync(request);
+            return ExecuteTaskAsync(request, CancellationToken.None);
         }
 
-        public Task<IRestResponse<T>> ExecuteGetTaskAsync<T>(IRestRequest request, System.Threading.CancellationToken token)
+        public Task<IRestResponse<T>> ExecuteGetTaskAsync<T>(IRestRequest request, CancellationToken token)
         {
-            throw new NotImplementedException();
+            request.Method = Method.GET;
+            return ExecuteTaskAsync<T>(request, token);
         }
 
         public Task<IRestResponse<T>> ExecuteGetTaskAsync<T>(IRestRequest request)
         {
-            //The real rest sharp modified your request as well.
-            request.Method = Method.GET;
-            return ExecuteTaskAsync<T>(request);
+            return ExecuteGetTaskAsync<T>(request, CancellationToken.None);
         }
 
-        public Task<IRestResponse> ExecutePostTaskAsync(IRestRequest request, System.Threading.CancellationToken token)
+        public Task<IRestResponse> ExecutePostTaskAsync(IRestRequest request, CancellationToken token)
         {
-            throw new NotImplementedException();
+            request.Method = Method.POST;
+            return ExecuteTaskAsync(request, token);
         }
 
         public Task<IRestResponse> ExecutePostTaskAsync(IRestRequest request)
         {
-            request.Method = Method.POST;
-            return ExecuteTaskAsync(request);
+            return ExecutePostTaskAsync(request, CancellationToken.None);
         }
 
-        public Task<IRestResponse<T>> ExecutePostTaskAsync<T>(IRestRequest request, System.Threading.CancellationToken token)
+        public Task<IRestResponse<T>> ExecutePostTaskAsync<T>(IRestRequest request, CancellationToken token)
         {
-            throw new NotImplementedException();
+            request.Method = Method.POST;
+            return ExecuteTaskAsync<T>(request, token);
         }
 
         public Task<IRestResponse<T>> ExecutePostTaskAsync<T>(IRestRequest request)
         {
-            //The real rest sharp modified your request as well.
             request.Method = Method.POST;
-            return ExecuteTaskAsync<T>(request);
+            return ExecuteTaskAsync<T>(request, CancellationToken.None);
         }
 
         public Task<IRestResponse> ExecuteTaskAsync(IRestRequest request)
         {
+            return ExecuteTaskAsync(request, CancellationToken.None);
+        }
+
+        public Task<IRestResponse> ExecuteTaskAsync(IRestRequest request, CancellationToken token)
+        {
             return Task.Run<IRestResponse>(() =>
             {
                 return Execute(request);
-            });
-        }
-
-        public Task<IRestResponse> ExecuteTaskAsync(IRestRequest request, System.Threading.CancellationToken token)
-        {
-            throw new NotImplementedException();
+            }, token);
         }
 
         public Task<IRestResponse<T>> ExecuteTaskAsync<T>(IRestRequest request)
         {
+            return ExecuteTaskAsync<T>(request, CancellationToken.None);
+        }
+
+        public Task<IRestResponse<T>> ExecuteTaskAsync<T>(IRestRequest request, CancellationToken token)
+        {
             return Task.Run<IRestResponse<T>>(() =>
             {
                 return UnrestrictedExecute<T>(request);
-            });
-        }
-
-        public Task<IRestResponse<T>> ExecuteTaskAsync<T>(IRestRequest request, System.Threading.CancellationToken token)
-        {
-            throw new NotImplementedException();
+            }, token);
         }
 
         public X509CertificateCollection ClientCertificates { get; set; }

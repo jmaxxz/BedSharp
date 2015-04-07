@@ -179,5 +179,57 @@ namespace BedSharp
             //Assert
             Assert.AreEqual(Method.GET, response.Request.Method);
         }
+
+        [TestMethod]
+        public void ExecutePostTaskAsyncTWithCancelationToken()
+        {
+            //Arrange
+            var restclient = Rest.On().Respond;
+
+            //Act
+            var response = restclient.ExecutePostTaskAsync<object>(new RestRequest("/url/resource"), System.Threading.CancellationToken.None).Result;
+
+            //Assert
+            Assert.AreEqual(Method.POST, response.Request.Method);
+        }
+
+        [TestMethod]
+        public void ExecutePostTaskAsyncWithCancelationToken()
+        {
+            //Arrange
+            var restclient = Rest.On().Respond;
+
+            //Act
+            var response = restclient.ExecutePostTaskAsync(new RestRequest("/url/resource"), System.Threading.CancellationToken.None).Result;
+
+            //Assert
+            Assert.AreEqual(Method.POST, response.Request.Method);
+        }
+
+        [TestMethod]
+        public void GetAsyncTaskTWithCancelationToken()
+        {
+            //Arrange
+            var restclient = Rest.On().Respond;
+
+            //Act
+            var response = restclient.ExecuteGetTaskAsync<object>(new RestRequest("/url/resource"), System.Threading.CancellationToken.None).Result;
+
+            //Assert
+            Assert.AreEqual(Method.GET, response.Request.Method);
+        }
+
+        [TestMethod]
+        public void GetAsyncTaskWithCancelationToken()
+        {
+            //Arrange
+            var restclient = Rest.On().Respond;
+
+            //Act
+            var response = restclient.ExecuteGetTaskAsync(new RestRequest("/url/resource"), System.Threading.CancellationToken.None).Result;
+
+            //Assert
+            Assert.AreEqual(Method.GET, response.Request.Method);
+        }
     }
 }
