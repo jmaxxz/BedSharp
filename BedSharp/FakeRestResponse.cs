@@ -145,7 +145,9 @@ namespace BedSharp
 
         public RestRequestAsyncHandle ExecuteAsync(IRestRequest request, Action<IRestResponse, RestRequestAsyncHandle> callback)
         {
-            throw new NotImplementedException();
+            var requestHandle = new RestRequestAsyncHandle();
+            callback(Execute(request), requestHandle);
+            return requestHandle;
         }
 
         public RestRequestAsyncHandle ExecuteAsyncGet<T>(IRestRequest request, Action<IRestResponse<T>, RestRequestAsyncHandle> callback, string httpMethod)

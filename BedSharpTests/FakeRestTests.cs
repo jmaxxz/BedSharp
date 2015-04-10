@@ -382,5 +382,20 @@ namespace BedSharp
             Assert.AreEqual(201, (int)response.StatusCode);
             Assert.AreEqual("response", response.Content);
         }
+
+        [TestMethod]
+        public void ExecuteAsyncWithCallbackCanBeUsed()
+        {
+            // Arrange
+            var result = Rest.On("Get").Respond.Status(201).Content("response");
+
+            IRestResponse response = null;
+            // Act
+            var returnedValue = result.ExecuteAsync(new RestRequest("api/v1/things", Method.GET), (resp, req) => response = resp);
+
+            // Assert
+            Assert.IsNotNull(returnedValue);
+            Assert.AreEqual("response", response.Content);
+        }
     }
 }
