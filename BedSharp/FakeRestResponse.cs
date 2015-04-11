@@ -140,7 +140,9 @@ namespace BedSharp
 
         public RestRequestAsyncHandle ExecuteAsync<T>(IRestRequest request, Action<IRestResponse<T>, RestRequestAsyncHandle> callback)
         {
-            throw new NotImplementedException();
+            var requestHandle = new RestRequestAsyncHandle();
+            callback(UnrestrictedExecute<T>(request), requestHandle);
+            return requestHandle;
         }
 
         public RestRequestAsyncHandle ExecuteAsync(IRestRequest request, Action<IRestResponse, RestRequestAsyncHandle> callback)
@@ -152,22 +154,26 @@ namespace BedSharp
 
         public RestRequestAsyncHandle ExecuteAsyncGet<T>(IRestRequest request, Action<IRestResponse<T>, RestRequestAsyncHandle> callback, string httpMethod)
         {
-            throw new NotImplementedException();
+            request.Method = Method.GET;
+            return ExecuteAsync(request, callback);
         }
 
         public RestRequestAsyncHandle ExecuteAsyncGet(IRestRequest request, Action<IRestResponse, RestRequestAsyncHandle> callback, string httpMethod)
         {
-            throw new NotImplementedException();
+            request.Method = Method.GET;
+            return ExecuteAsync(request, callback);
         }
 
         public RestRequestAsyncHandle ExecuteAsyncPost<T>(IRestRequest request, Action<IRestResponse<T>, RestRequestAsyncHandle> callback, string httpMethod)
         {
-            throw new NotImplementedException();
+            request.Method = Method.POST;
+            return ExecuteAsync<T>(request, callback);
         }
 
         public RestRequestAsyncHandle ExecuteAsyncPost(IRestRequest request, Action<IRestResponse, RestRequestAsyncHandle> callback, string httpMethod)
         {
-            throw new NotImplementedException();
+            request.Method = Method.POST;
+            return ExecuteAsync(request, callback);
         }
 
         public Task<IRestResponse> ExecuteGetTaskAsync(IRestRequest request, CancellationToken token)

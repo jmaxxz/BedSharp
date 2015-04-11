@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using RestSharp;
+using System.Threading;
 
 namespace BedSharp
 {
@@ -187,7 +188,7 @@ namespace BedSharp
             var restclient = Rest.On().Respond;
 
             //Act
-            var response = restclient.ExecutePostTaskAsync<object>(new RestRequest("/url/resource"), System.Threading.CancellationToken.None).Result;
+            var response = restclient.ExecutePostTaskAsync<object>(new RestRequest("/url/resource"), CancellationToken.None).Result;
 
             //Assert
             Assert.AreEqual(Method.POST, response.Request.Method);
@@ -200,7 +201,7 @@ namespace BedSharp
             var restclient = Rest.On().Respond;
 
             //Act
-            var response = restclient.ExecutePostTaskAsync(new RestRequest("/url/resource"), System.Threading.CancellationToken.None).Result;
+            var response = restclient.ExecutePostTaskAsync(new RestRequest("/url/resource"), CancellationToken.None).Result;
 
             //Assert
             Assert.AreEqual(Method.POST, response.Request.Method);
@@ -213,7 +214,7 @@ namespace BedSharp
             var restclient = Rest.On().Respond;
 
             //Act
-            var response = restclient.ExecuteGetTaskAsync<object>(new RestRequest("/url/resource"), System.Threading.CancellationToken.None).Result;
+            var response = restclient.ExecuteGetTaskAsync<object>(new RestRequest("/url/resource"), CancellationToken.None).Result;
 
             //Assert
             Assert.AreEqual(Method.GET, response.Request.Method);
@@ -226,9 +227,69 @@ namespace BedSharp
             var restclient = Rest.On().Respond;
 
             //Act
-            var response = restclient.ExecuteGetTaskAsync(new RestRequest("/url/resource"), System.Threading.CancellationToken.None).Result;
+            var response = restclient.ExecuteGetTaskAsync(new RestRequest("/url/resource"), CancellationToken.None).Result;
 
             //Assert
+            Assert.AreEqual(Method.GET, response.Request.Method);
+        }
+
+        [TestMethod]
+        public void ExecuteAsyncPostWithCallback()
+        {
+            //Arrange
+            var restclient = Rest.On().Respond;
+            IRestResponse response = null;
+
+            //Act
+            var returnedValue = restclient.ExecuteAsyncPost(new RestRequest("api/v1/things", Method.GET), (resp, req) => response = resp, "GET");
+
+            //Assert
+            Assert.IsNotNull(returnedValue);
+            Assert.AreEqual(Method.POST, response.Request.Method);
+        }
+
+        [TestMethod]
+        public void ExecuteAsyncGetWithCallback()
+        {
+            //Arrange
+            var restclient = Rest.On().Respond;
+            IRestResponse response = null;
+
+            //Act
+            var returnedValue = restclient.ExecuteAsyncGet(new RestRequest("api/v1/things", Method.GET), (resp, req) => response = resp, "POST");
+
+            //Assert
+            Assert.IsNotNull(returnedValue);
+            Assert.AreEqual(Method.GET, response.Request.Method);
+        }
+
+        [TestMethod]
+        public void ExecuteAsyncPostTWithCallback()
+        {
+            //Arrange
+            var restclient = Rest.On().Respond;
+            IRestResponse response = null;
+
+            //Act
+            var returnedValue = restclient.ExecuteAsyncPost<object>(new RestRequest("api/v1/things", Method.GET), (resp, req) => response = resp, "GET");
+
+            //Assert
+            Assert.IsNotNull(returnedValue);
+            Assert.AreEqual(Method.POST, response.Request.Method);
+        }
+
+        [TestMethod]
+        public void ExecuteAsyncGetTWithCallback()
+        {
+            //Arrange
+            var restclient = Rest.On().Respond;
+            IRestResponse response = null;
+
+            //Act
+            var returnedValue = restclient.ExecuteAsyncGet<object>(new RestRequest("api/v1/things", Method.GET), (resp, req) => response = resp, "POST");
+
+            //Assert
+            Assert.IsNotNull(returnedValue);
             Assert.AreEqual(Method.GET, response.Request.Method);
         }
     }
