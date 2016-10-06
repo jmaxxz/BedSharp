@@ -6,6 +6,7 @@ using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 using System.Linq;
 using System.Threading;
+using RestSharp.Authenticators;
 
 namespace BedSharp
 {
@@ -266,5 +267,33 @@ namespace BedSharp
         public bool UseSynchronizationContext { get; set; }
 
         public string UserAgent { get; set; }
+
+        public void AddHandler(string contentType, RestSharp.Deserializers.IDeserializer deserializer)
+        {
+            throw new NotImplementedException();
+        }
+
+        public System.Net.Cache.RequestCachePolicy CachePolicy { get; set; }
+
+        public void ClearHandlers()
+        {
+            throw new NotImplementedException();
+        }
+
+        public byte[] DownloadData(IRestRequest request)
+        {
+            throw new NotImplementedException();
+        }
+
+        public System.Text.Encoding Encoding { get; set; }
+
+        public bool FollowRedirects { get; set; }
+
+        public int? MaxRedirects { get; set; }
+
+        public void RemoveHandler(string contentType)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
